@@ -1,1 +1,1 @@
-"# 2048-java" 
+This project wishes to recreate the popular game **2048** in Java.
