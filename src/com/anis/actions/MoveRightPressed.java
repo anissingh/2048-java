@@ -23,12 +23,12 @@ public class MoveRightPressed extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		if(!KeysPressed.isRightArrowPressed) {
 			KeysPressed.isRightArrowPressed = true;
-			// Move tiles right and update board
-			boardManager.moveRight();
-			content.revalidate();
-			content.repaint();
-			// TODO: For debugging
 			System.out.println("Right arrow pressed");
+			boolean tileMoved = boardManager.moveRight();
+			if(tileMoved) {
+				content.setUpdatePositionManager(true);
+				content.setAnimationOccurring(true);
+			}
 		}
 	}
 	

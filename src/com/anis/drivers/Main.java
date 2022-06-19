@@ -26,6 +26,7 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(content);
 		initKeyBindings(content, bm);
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 	
@@ -47,10 +48,6 @@ public class Main {
 		bm.initializeBoard();
 		GameContent content = new GameContent(bm);
 		initWindow(frame, content, bm);
-		
-		
-		// TODO: For debugging
-		bm.printBoard();
 	}
 	
 }

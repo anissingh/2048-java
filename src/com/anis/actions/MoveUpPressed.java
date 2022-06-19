@@ -24,9 +24,11 @@ public class MoveUpPressed extends AbstractAction {
 		if(!KeysPressed.isUpArrowPressed) {
 			KeysPressed.isUpArrowPressed = true;
 			System.out.println("Up arrow pressed");
-			boardManager.moveUp();
-			content.revalidate();
-			content.repaint();
+			boolean tileMoved = boardManager.moveUp();
+			if(tileMoved) {
+				content.setUpdatePositionManager(true);
+				content.setAnimationOccurring(true);
+			}
 		}
 	}
 

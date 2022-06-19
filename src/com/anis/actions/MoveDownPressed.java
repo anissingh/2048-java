@@ -24,9 +24,11 @@ public class MoveDownPressed extends AbstractAction {
 		if(!KeysPressed.isDownArrowPressed) {
 			KeysPressed.isDownArrowPressed = true;
 			System.out.println("Down arrow pressed");
-			boardManager.moveDown();
-			content.revalidate();
-			content.repaint();
+			boolean tileMoved = boardManager.moveDown();
+			if(tileMoved) {
+				content.setUpdatePositionManager(true);
+				content.setAnimationOccurring(true);
+			}
 		}
 	}
 

@@ -25,12 +25,18 @@ public class MoveLeftPressed extends AbstractAction {
 		// This prevents holding down arrow keys from being detected as multiple events
 		if(!KeysPressed.isLeftArrowPressed) {
 			KeysPressed.isLeftArrowPressed = true;
-			// Move left and repaint board
-			boardManager.moveLeft();
-			content.revalidate();
-			content.repaint();
-			// TODO: For debugging
 			System.out.println("Left arrow pressed");
+			// Move left and repaint board
+			boolean tileMoved = boardManager.moveLeft();
+			// If a tile actually moved
+			if(tileMoved) {
+				// Tell content that the position manager must be re-initialized
+				// TODO: There may be an issue if the board tries to re-update in between moveLeft() and setUpdate()
+				// because the positionManager won't be updated.
+				content.setUpdatePositionManager(true);
+				// Tell content that an animation should be occurring potentially
+				content.setAnimationOccurring(true);
+			}
 		}
 	}
 
