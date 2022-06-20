@@ -9,6 +9,7 @@ public class BoardManager {
 	public static final int COLS = 4;
 	private Tile[][] board;
 	private Random rand;
+	private boolean canMove = true;
 	
 	// TODO: Add functionality to load in custom board
 	public BoardManager() {
@@ -52,6 +53,7 @@ public class BoardManager {
 			TileManager.setTileValue(board[tileY][tileX], tileVal);
 			// TODO: For debugging
 			System.out.println("Tile spawned at " + tileX + ", " + tileY);
+			setGameOver();
 			return true;
 		} else {
 			boolean isTileSpawnable = false;
@@ -71,9 +73,13 @@ public class BoardManager {
 				TileManager.setTileValue(board[tileY][tileX], tileVal);
 				// TODO: For debugging
 				System.out.println("Tile spawned at " + tileX + ", " + tileY);
+				setGameOver();
 				return true;
 			}
 			
+			System.out.println("No tile spawned.");
+			// If no tile was spawned, the game must be over
+			this.canMove = false;
 			return false;
 		}
 		
@@ -346,9 +352,60 @@ public class BoardManager {
 		return tileMoved;
 	}
 	
-	// TODO: Remove when done making GameContent not interact with tile objects themselves
+	private void setGameOver() {
+		// Iterate over the game board and check if surrounding tile values are equal to the current tile
+		// or there is an empty spot right next to the tile
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLS; j++) {
+				int currTileVal = TileManager.getTileValue(board[i][j]);
+				// Check if we are at the last row
+				if(i != ROWS - 1) {
+					// If not, check row below
+					if(checkSurroundingTileForGameOver(currTileVal, TileManager.getTileValue(board[i + 1][j]))) {
+						this.canMove = true;
+						return;
+					}
+				}
+				// Check if we are at the last column
+				if(j != COLS - 1) {
+					// If not, check column to the right
+					if(checkSurroundingTileForGameOver(currTileVal, TileManager.getTileValue(board[i][j + 1]))) {
+						this.canMove = true;
+						return;
+					}
+				}
+				// Check if we are at the first row
+				if(i != 0) {
+					// If not, check row above
+					if(checkSurroundingTileForGameOver(currTileVal, TileManager.getTileValue(board[i - 1][j]))) {
+						this.canMove = true;
+						return;
+					}
+				}
+				// Check if we are at the first column
+				if(j != 0) {
+					// If not, check column to the left
+					if(checkSurroundingTileForGameOver(currTileVal, TileManager.getTileValue(board[i][j - 1]))) {
+						this.canMove = true;
+						return;
+					}
+				}
+			}
+		}
+		// If we make it here, the method never set canMove to true, so the player cannot move any tiles
+		this.canMove = false;
+	}
+	
+	private boolean checkSurroundingTileForGameOver(int currTileVal, int tileValToCompare) {
+		return tileValToCompare == currTileVal || tileValToCompare == 0;
+	}
+	
 	public Tile[][] getBoard() {
 		return this.board;
+	}
+	
+	public boolean canMove() {
+		return this.canMove;
 	}
 	
 	// Prints a text-representation of the board

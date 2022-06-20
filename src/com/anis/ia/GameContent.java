@@ -11,7 +11,6 @@ import javax.swing.Timer;
 
 import com.anis.usecases.BoardManager;
 import com.anis.usecases.BoardOutputBoundary;
-import com.anis.usecases.TileManager;
 
 public class GameContent extends JPanel implements ActionListener {
 
@@ -50,6 +49,8 @@ public class GameContent extends JPanel implements ActionListener {
 	private PositionManager positionManager;
 	private boolean resetPositionManager;
 	private boolean isAnimationOccurring = false;
+	private boolean lastRender = false;
+	private boolean stopDrawing = false;
 	
 	
 	public GameContent(BoardManager boardManager) {
@@ -63,11 +64,14 @@ public class GameContent extends JPanel implements ActionListener {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		drawBackground(g);
-		drawBoard(g);
+		if(!stopDrawing) {
+			super.paintComponent(g);
+			drawBackground(g);
+			drawBoard(g);
+		}
 	}
 	
+	// TODO: This method is too long; break into helper methods
 	private void drawBoard(Graphics g) {
 		boolean tileAnimating = false;
 		if(resetPositionManager) {
@@ -132,12 +136,27 @@ public class GameContent extends JPanel implements ActionListener {
 		if(!tileAnimating && isAnimationOccurring) {
 			isAnimationOccurring = false;
 			// Spawn tile because an animation has completed
-			if(!boardManager.spawnTile()) {
-				// TODO: Fix
-				drawGameOver(g);
-				timer.stop();
+			// Don't need to check the return value of spawnTile() because if an animation occurred,
+			// the game 
+			boardManager.spawnTile();
+			
+			// Check if the game is now over
+			if(boardOutput.isGameOver()) {
+				// Draw the last tile that was spawned
+				// TODO: Make spawnTile return the x and y of tile spawned, and use those to just draw in the last
+				// tile separately
+				lastRender = true;
+				// Return so the below lastRender check does not immediately go off
+				return;
 			}
 		}
+		
+		if(lastRender) {
+			drawGameOver(g);
+			stopDrawing = true;
+			timer.stop();
+		}
+		
 	}
 	
 	private void drawBackground(Graphics g) {
@@ -184,7 +203,7 @@ public class GameContent extends JPanel implements ActionListener {
 	
 	private void drawTile(Graphics g, int tileVal, int startX, int startY, int sizeX, int sizeY) {
 		boolean drawNum;
-		int numOffset = 0;
+		int numOffset = calculateTileTextOffset(tileVal);
 		Color numColour = Color.BLACK;
 		
 		// Get the tile background colour
@@ -192,77 +211,66 @@ public class GameContent extends JPanel implements ActionListener {
 			case 0:
 				g.setColor(TILE_BG_COLOUR);
 				drawNum = false;
+				numOffset = 0;
 				break;
 			case 2: 
 				g.setColor(TILE_V2_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.BLACK;
 				break;
 			case 4:
 				g.setColor(TILE_V4_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.BLACK;
 				break;
 			case 8:
 				g.setColor(TILE_V8_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 16:
 				g.setColor(TILE_V16_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 32:
 				g.setColor(TILE_V32_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 64:
 				g.setColor(TILE_V64_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 128:
 				g.setColor(TILE_V128_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 256:
 				g.setColor(TILE_V256_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 512:
 				g.setColor(TILE_V512_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 1024:
 				g.setColor(TILE_V1024_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			case 2048:
 				g.setColor(TILE_V2048_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 			default:
 				g.setColor(TILE_VOTHER_COLOUR);
 				drawNum = true;
-				numOffset = 0;
 				numColour = Color.WHITE;
 				break;
 		}
@@ -274,8 +282,12 @@ public class GameContent extends JPanel implements ActionListener {
 		if(drawNum) {
 			g.setColor(numColour);
 			g.setFont(TILE_FONT);
-			g.drawString(String.valueOf(tileVal), startX + sizeX / 2 - numOffset, startY + sizeY / 2);
+			g.drawString(String.valueOf(tileVal), startX + sizeX / 2 - numOffset, startY + sizeY / 2 + 5);
 		}
+	}
+	
+	private int calculateTileTextOffset(int tileVal) {
+		return Integer.toString(tileVal).length() * 4;
 	}
 	
 	private int translateCoordinateToScreen(char type, int coord) {
@@ -324,6 +336,10 @@ public class GameContent extends JPanel implements ActionListener {
 	
 	public void setAnimationOccurring(boolean isAnimationOccurring) {
 		this.isAnimationOccurring = isAnimationOccurring;
+	}
+	
+	public boolean getIsAnimationOccurring() {
+		return this.isAnimationOccurring;
 	}
 	
 }

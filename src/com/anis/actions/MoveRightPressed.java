@@ -21,7 +21,7 @@ public class MoveRightPressed extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(!KeysPressed.isRightArrowPressed) {
+		if(!KeysPressed.isRightArrowPressed && !content.getIsAnimationOccurring()) {
 			KeysPressed.isRightArrowPressed = true;
 			System.out.println("Right arrow pressed");
 			boolean tileMoved = boardManager.moveRight();

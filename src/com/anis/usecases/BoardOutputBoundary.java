@@ -32,6 +32,10 @@ public class BoardOutputBoundary {
 	public boolean getTileIsCompressing(int rowIndex, int colIndex) {
 		return boardManager.getBoard()[rowIndex][colIndex].getIsCompressing();
 	}
+	
+	public boolean isGameOver() {
+		return !boardManager.canMove();
+	}
 
 	public void setTileValue(int value, int rowIndex, int colIndex) {
 		boardManager.getBoard()[rowIndex][colIndex].setValue(value);

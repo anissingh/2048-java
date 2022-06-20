@@ -23,7 +23,10 @@ public class MoveLeftPressed extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		// Check if left arrow was not previously pressed
 		// This prevents holding down arrow keys from being detected as multiple events
-		if(!KeysPressed.isLeftArrowPressed) {
+		// Also check if an animation is occurring
+		// This prevents tiles from being moved before a previous animation is finished, which causes
+		// problems with the drawing function
+		if(!KeysPressed.isLeftArrowPressed && !content.getIsAnimationOccurring()) {
 			KeysPressed.isLeftArrowPressed = true;
 			System.out.println("Left arrow pressed");
 			// Move left and repaint board

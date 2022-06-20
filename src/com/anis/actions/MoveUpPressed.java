@@ -21,7 +21,7 @@ public class MoveUpPressed extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(!KeysPressed.isUpArrowPressed) {
+		if(!KeysPressed.isUpArrowPressed && !content.getIsAnimationOccurring()) {
 			KeysPressed.isUpArrowPressed = true;
 			System.out.println("Up arrow pressed");
 			boolean tileMoved = boardManager.moveUp();
