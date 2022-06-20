@@ -5,17 +5,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import com.anis.ia.GameContent;
-import com.anis.usecases.BoardManager;
+import com.anis.usecases.BoardManipulator;
 
 public class MoveUpPressed extends AbstractAction {
 
 	public static final String moveUpPName = "MOVE UP PRESSED";
 	private static final long serialVersionUID = -6532155927148585733L;
 	private final GameContent content;
-	private final BoardManager boardManager;
+	private final BoardManipulator boardManipulator;
 	
-	public MoveUpPressed(BoardManager boardManager, GameContent content) {
-		this.boardManager = boardManager;
+	public MoveUpPressed(BoardManipulator boardManipulator, GameContent content) {
+		this.boardManipulator = boardManipulator;
 		this.content = content;
 	}
 
@@ -24,7 +24,7 @@ public class MoveUpPressed extends AbstractAction {
 		if(!KeysPressed.isUpArrowPressed && !content.getIsAnimationOccurring()) {
 			KeysPressed.isUpArrowPressed = true;
 			System.out.println("Up arrow pressed");
-			boolean tileMoved = boardManager.moveUp();
+			boolean tileMoved = boardManipulator.moveUp();
 			if(tileMoved) {
 				content.setUpdatePositionManager(true);
 				content.setAnimationOccurring(true);

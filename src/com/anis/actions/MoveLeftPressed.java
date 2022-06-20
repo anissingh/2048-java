@@ -5,17 +5,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import com.anis.ia.GameContent;
-import com.anis.usecases.BoardManager;
+import com.anis.usecases.BoardManipulator;
 
 public class MoveLeftPressed extends AbstractAction {
 
 	public static final String moveLeftPName = "MOVE LEFT PRESSED";
 	private static final long serialVersionUID = -9085269388693092643L;
 	private final GameContent content;
-	private final BoardManager boardManager;
+	private final BoardManipulator boardManipulator;
 	
-	public MoveLeftPressed(BoardManager boardManager, GameContent content) {
-		this.boardManager = boardManager;
+	public MoveLeftPressed(BoardManipulator boardManipulator, GameContent content) {
+		this.boardManipulator = boardManipulator;
 		this.content = content;
 	}
 	
@@ -30,7 +30,7 @@ public class MoveLeftPressed extends AbstractAction {
 			KeysPressed.isLeftArrowPressed = true;
 			System.out.println("Left arrow pressed");
 			// Move left and repaint board
-			boolean tileMoved = boardManager.moveLeft();
+			boolean tileMoved = boardManipulator.moveLeft();
 			// If a tile actually moved
 			if(tileMoved) {
 				// Tell content that the position manager must be re-initialized

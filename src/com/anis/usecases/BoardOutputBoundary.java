@@ -1,7 +1,7 @@
 package com.anis.usecases;
 
 
-public class BoardOutputBoundary {
+public class BoardOutputBoundary implements BoardTileMatrix {
 	
 	private BoardManager boardManager;
 	

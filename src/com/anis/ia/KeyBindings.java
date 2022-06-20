@@ -1,4 +1,4 @@
-package com.anis.drivers;
+package com.anis.ia;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;

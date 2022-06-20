@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.anis.usecases.BoardManager;
-import com.anis.usecases.BoardOutputBoundary;
+import com.anis.usecases.BoardTileMatrix;
+import com.anis.usecases.TileSpawner;
 
 public class GameContent extends JPanel implements ActionListener {
 
@@ -26,25 +26,25 @@ public class GameContent extends JPanel implements ActionListener {
 	private static final int TILE_SLIDE_SPEED = 50;
 	private static final Color TILE_BG_COLOUR = new Color(204, 192, 179); // new Color(212, 204, 196);
 	private static final Color TILE_V2_COLOUR = new Color(238, 228, 218);
-    	private static final Color TILE_V4_COLOUR = new Color(237, 224, 200);
-    	private static final Color TILE_V8_COLOUR = new Color(242, 177, 121);
-    	private static final Color TILE_V16_COLOUR = new Color(245, 149, 99);
-    	private static final Color TILE_V32_COLOUR = new Color(246, 124, 95);
-    	private static final Color TILE_V64_COLOUR = new Color(246, 94, 59);
-    	private static final Color TILE_V128_COLOUR= new Color(237, 207, 114);
-    	private static final Color TILE_V256_COLOUR = new Color(237, 204, 97);
-   	private static final Color TILE_V512_COLOUR = new Color(237, 200, 80);
-    	private static final Color TILE_V1024_COLOUR = new Color(237, 197, 63);
-    	private static final Color TILE_V2048_COLOUR = new Color(237, 194, 46);
-    	private static final Color TILE_VOTHER_COLOUR = Color.BLACK;
-    	private static final Color BOARD_BACKGROUND_COLOUR = new Color(149, 140, 129); // new Color(137, 122, 100);
-    	private static final int BOARD_ARC_X = 10;
-    	private static final int BOARD_ARC_Y = 10;
-    	private static final Font TILE_FONT = new Font("TimesRoman", Font.BOLD, 18);
-    	private static final Font GAME_OVER_FONT = new Font("TimesRoman", Font.BOLD, 40);
-    	private static final int ANIMATION_DELAY_MS = 10;
-	private final BoardManager boardManager;
-	private final BoardOutputBoundary boardOutput;
+    private static final Color TILE_V4_COLOUR = new Color(237, 224, 200);
+    private static final Color TILE_V8_COLOUR = new Color(242, 177, 121);
+    private static final Color TILE_V16_COLOUR = new Color(245, 149, 99);
+    private static final Color TILE_V32_COLOUR = new Color(246, 124, 95);
+    private static final Color TILE_V64_COLOUR = new Color(246, 94, 59);
+    private static final Color TILE_V128_COLOUR= new Color(237, 207, 114);
+    private static final Color TILE_V256_COLOUR = new Color(237, 204, 97);
+    private static final Color TILE_V512_COLOUR = new Color(237, 200, 80);
+    private static final Color TILE_V1024_COLOUR = new Color(237, 197, 63);
+    private static final Color TILE_V2048_COLOUR = new Color(237, 194, 46);
+    private static final Color TILE_VOTHER_COLOUR = Color.BLACK;
+    private static final Color BOARD_BACKGROUND_COLOUR = new Color(149, 140, 129); // new Color(137, 122, 100);
+    private static final int BOARD_ARC_X = 10;
+    private static final int BOARD_ARC_Y = 10;
+    private static final Font TILE_FONT = new Font("TimesRoman", Font.BOLD, 18);
+    private static final Font GAME_OVER_FONT = new Font("TimesRoman", Font.BOLD, 40);
+    private static final int ANIMATION_DELAY_MS = 10;
+	private final TileSpawner tileSpawner;
+	private final BoardTileMatrix boardOutput;
 	private final Timer timer;
 	private PositionManager positionManager;
 	private boolean resetPositionManager;
@@ -53,9 +53,9 @@ public class GameContent extends JPanel implements ActionListener {
 	private boolean stopDrawing = false;
 	
 	
-	public GameContent(BoardManager boardManager) {
-		this.boardManager = boardManager;
-		this.boardOutput = new BoardOutputBoundary(boardManager);
+	public GameContent(TileSpawner tileSpawner, BoardTileMatrix boardOutput) {
+		this.tileSpawner = tileSpawner;
+		this.boardOutput = boardOutput;
 		this.positionManager = initializePositionManager();
 		this.resetPositionManager = false;
 		this.timer = new Timer(ANIMATION_DELAY_MS, this);
@@ -78,8 +78,8 @@ public class GameContent extends JPanel implements ActionListener {
 			positionManager = initializePositionManager();
 			resetPositionManager = false;
 		}
-		for(int i = 0; i < BoardManager.ROWS; i++) {
-			for(int j = 0; j < BoardManager.COLS; j++) {
+		for(int i = 0; i < BoardTileMatrix.ROWS; i++) {
+			for(int j = 0; j < BoardTileMatrix.COLS; j++) {
 				int startX = translateCoordinateToScreen('x', j);
 				int startY = translateCoordinateToScreen('y', i);
 				int tileCurrX = positionManager.getPosition('x', i, j);
@@ -138,7 +138,7 @@ public class GameContent extends JPanel implements ActionListener {
 			// Spawn tile because an animation has completed
 			// Don't need to check the return value of spawnTile() because if an animation occurred,
 			// the game 
-			boardManager.spawnTile();
+			tileSpawner.spawnTile();
 			
 			// Check if the game is now over
 			if(boardOutput.isGameOver()) {
@@ -162,8 +162,8 @@ public class GameContent extends JPanel implements ActionListener {
 	private void drawBackground(Graphics g) {
 		int startX = 0;
 		int startY = 0;
-		int sizeX = TILE_SIZE_X * BoardManager.ROWS + PADDING_X * (BoardManager.ROWS + 1);
-		int sizeY = TILE_SIZE_Y * BoardManager.COLS + PADDING_Y * (BoardManager.COLS + 1);
+		int sizeX = TILE_SIZE_X * BoardTileMatrix.ROWS + PADDING_X * (BoardTileMatrix.ROWS + 1);
+		int sizeY = TILE_SIZE_Y * BoardTileMatrix.COLS + PADDING_Y * (BoardTileMatrix.COLS + 1);
 		g.setColor(BOARD_BACKGROUND_COLOUR);
 		g.fillRoundRect(startX, startY, sizeX, sizeY, BOARD_ARC_X, BOARD_ARC_Y);
 	}
@@ -301,17 +301,17 @@ public class GameContent extends JPanel implements ActionListener {
 	private void drawGameOver(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.setFont(GAME_OVER_FONT);
-		int sizeX = TILE_SIZE_X * BoardManager.ROWS + PADDING_X * (BoardManager.ROWS + 1);
-		int sizeY = TILE_SIZE_Y * BoardManager.COLS + PADDING_Y * (BoardManager.COLS + 1);
+		int sizeX = TILE_SIZE_X * BoardTileMatrix.ROWS + PADDING_X * (BoardTileMatrix.ROWS + 1);
+		int sizeY = TILE_SIZE_Y * BoardTileMatrix.COLS + PADDING_Y * (BoardTileMatrix.COLS + 1);
 		int offset = 20;
 		g.drawString("Game over!", sizeX / 2 - offset, sizeY / 2);
 	}
 	
 	// TODO: Move this to a different class
 	private PositionManager initializePositionManager() {
-		PositionManager positionManager = new PositionManager(BoardManager.ROWS, BoardManager.COLS);
-		for(int i = 0; i < BoardManager.ROWS; i++) {
-			for(int j = 0; j < BoardManager.COLS; j++) {
+		PositionManager positionManager = new PositionManager(BoardTileMatrix.ROWS, BoardTileMatrix.COLS);
+		for(int i = 0; i < BoardTileMatrix.ROWS; i++) {
+			for(int j = 0; j < BoardTileMatrix.COLS; j++) {
 				int xPos = translateCoordinateToScreen('x', boardOutput.getTilePrevX(i, j));
 				int yPos = translateCoordinateToScreen('y', boardOutput.getTilePrevY(i, j));;
 				positionManager.initializePosition(xPos, yPos, TILE_SIZE_X, TILE_SIZE_Y, i, j);
@@ -320,7 +320,7 @@ public class GameContent extends JPanel implements ActionListener {
 		return positionManager;
 	}
 	
-	public void updateScreen() {
+	protected void updateScreen() {
 		this.revalidate();
 		this.repaint();
 	}
@@ -341,5 +341,7 @@ public class GameContent extends JPanel implements ActionListener {
 	public boolean getIsAnimationOccurring() {
 		return this.isAnimationOccurring;
 	}
+
+
 	
 }

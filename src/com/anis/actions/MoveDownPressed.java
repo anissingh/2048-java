@@ -5,17 +5,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import com.anis.ia.GameContent;
-import com.anis.usecases.BoardManager;
+import com.anis.usecases.BoardManipulator;
 
 public class MoveDownPressed extends AbstractAction {
 
 	public static final String moveDownPName = "MOVE DOWN PRESSED";
 	private static final long serialVersionUID = 7847680339545237570L;
 	private final GameContent content; 
-	private final BoardManager boardManager;
+	private final BoardManipulator boardManipulator;
 	
-	public MoveDownPressed(BoardManager boardManager, GameContent content) {
-		this.boardManager = boardManager;
+	public MoveDownPressed(BoardManipulator boardManipulator, GameContent content) {
+		this.boardManipulator = boardManipulator;
 		this.content = content;
 	}
 
@@ -24,7 +24,7 @@ public class MoveDownPressed extends AbstractAction {
 		if(!KeysPressed.isDownArrowPressed && !content.getIsAnimationOccurring()) {
 			KeysPressed.isDownArrowPressed = true;
 			System.out.println("Down arrow pressed");
-			boolean tileMoved = boardManager.moveDown();
+			boolean tileMoved = boardManipulator.moveDown();
 			if(tileMoved) {
 				content.setUpdatePositionManager(true);
 				content.setAnimationOccurring(true);
