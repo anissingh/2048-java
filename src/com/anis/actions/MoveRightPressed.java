@@ -26,8 +26,6 @@ public class MoveRightPressed extends AbstractAction {
 			System.out.println("Right arrow pressed");
 			boolean tileMoved = boardManipulator.moveRight();
 			if(tileMoved) {
-//				content.setUpdatePositionManager(true);
-//				content.setAnimationOccurring(true);
 				animationManager.setAnimationBeginning();
 			}
 		}

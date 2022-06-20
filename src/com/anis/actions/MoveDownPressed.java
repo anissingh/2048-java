@@ -27,8 +27,6 @@ public class MoveDownPressed extends AbstractAction {
 			boolean tileMoved = boardManipulator.moveDown();
 			if(tileMoved) {
 				animationManager.setAnimationBeginning();
-//				content.setUpdatePositionManager(true);
-//				content.setAnimationOccurring(true);
 			}
 		}
 	}

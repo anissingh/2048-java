@@ -26,8 +26,6 @@ public class MoveUpPressed extends AbstractAction {
 			System.out.println("Up arrow pressed");
 			boolean tileMoved = boardManipulator.moveUp();
 			if(tileMoved) {
-//				content.setUpdatePositionManager(true);
-//				content.setAnimationOccurring(true);
 				animationManager.setAnimationBeginning();
 			}
 		}
