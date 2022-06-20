@@ -406,6 +406,7 @@ public class BoardManagerImpl implements BoardManager {
 		return this.canMove;
 	}
 	
+	// TODO: For debugging
 	// Prints a text-representation of the board
 	public void printBoard() {
 		for(int i = 0; i < ROWS; i++) {

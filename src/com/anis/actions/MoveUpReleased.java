@@ -6,7 +6,7 @@ import javax.swing.AbstractAction;
 
 public class MoveUpReleased extends AbstractAction {
 
-	public static final String moveUpRName = "MOVE UP RELEASED";
+	public static final String MOVE_UP_R_NAME = "MOVE UP RELEASED";
 	private static final long serialVersionUID = 9142010263129836157L;
 
 	@Override

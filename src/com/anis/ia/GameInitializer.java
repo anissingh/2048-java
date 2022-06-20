@@ -17,12 +17,12 @@ import com.anis.usecases.BoardTileMatrix;
 
 public class GameInitializer {
 	
-	private static final String windowTitle = "2048";
+	private static final String WINDOW_TITLE = "2048";
 	private static final int WINDOW_WIDTH = 700;
 	private static final int WINDOW_HEIGHT = 700;
 	
 	public static void setUpGame() {
-		JFrame frame = new JFrame(windowTitle);
+		JFrame frame = new JFrame(WINDOW_TITLE);
 		BoardManager bm = new BoardManagerImpl();
 		bm.initializeBoard();
 		BoardTileMatrix bo = new BoardOutputBoundary(bm);
@@ -32,7 +32,7 @@ public class GameInitializer {
 	
 	private static void initWindow(JFrame frame, GameContent content, BoardManager bm) {
 		frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		frame.setTitle(windowTitle);
+		frame.setTitle(WINDOW_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(content);
 		initKeyBindings(content, bm);
@@ -41,14 +41,14 @@ public class GameInitializer {
 	}
 	
 	private static void initKeyBindings(GameContent content, BoardManager bm) {
-		KeyBindings.addKeyBinding(content, "pressed LEFT", MoveLeftPressed.moveLeftPName, new MoveLeftPressed(bm, content));
-		KeyBindings.addKeyBinding(content, "released LEFT", MoveLeftReleased.moveLeftRName, new MoveLeftReleased());
-		KeyBindings.addKeyBinding(content, "pressed RIGHT", MoveRightPressed.moveRightPName, new MoveRightPressed(bm, content));
-		KeyBindings.addKeyBinding(content, "released RIGHT", MoveRightReleased.moveRightRName, new MoveRightReleased());
-		KeyBindings.addKeyBinding(content, "pressed UP", MoveUpPressed.moveUpPName, new MoveUpPressed(bm, content));
-		KeyBindings.addKeyBinding(content, "released UP", MoveUpReleased.moveUpRName, new MoveUpReleased());
-		KeyBindings.addKeyBinding(content, "pressed DOWN", MoveDownPressed.moveDownPName, new MoveDownPressed(bm, content));
-		KeyBindings.addKeyBinding(content, "released DOWN", MoveDownReleased.moveDownRName, new MoveDownReleased());
+		KeyBindings.addKeyBinding(content, "pressed LEFT", MoveLeftPressed.MOVE_LEFT_P_NAME, new MoveLeftPressed(bm, content));
+		KeyBindings.addKeyBinding(content, "released LEFT", MoveLeftReleased.MOVE_LEFT_R_NAME, new MoveLeftReleased());
+		KeyBindings.addKeyBinding(content, "pressed RIGHT", MoveRightPressed.MOVE_RIGHT_P_NAME, new MoveRightPressed(bm, content));
+		KeyBindings.addKeyBinding(content, "released RIGHT", MoveRightReleased.MOVE_RIGHT_R_NAME, new MoveRightReleased());
+		KeyBindings.addKeyBinding(content, "pressed UP", MoveUpPressed.MOVE_UP_P_NAME, new MoveUpPressed(bm, content));
+		KeyBindings.addKeyBinding(content, "released UP", MoveUpReleased.MOVE_UP_R_NAME, new MoveUpReleased());
+		KeyBindings.addKeyBinding(content, "pressed DOWN", MoveDownPressed.MOVE_DOWN_P_NAME, new MoveDownPressed(bm, content));
+		KeyBindings.addKeyBinding(content, "released DOWN", MoveDownReleased.MOVE_DOWN_R_NAME, new MoveDownReleased());
 	}
 	
 }

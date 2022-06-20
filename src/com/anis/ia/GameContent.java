@@ -12,7 +12,7 @@ import javax.swing.Timer;
 import com.anis.usecases.BoardTileMatrix;
 import com.anis.usecases.TileSpawner;
 
-public class GameContent extends JPanel implements ActionListener {
+public class GameContent extends JPanel implements ActionListener, ContentAnimationManager {
 
 	private static final long serialVersionUID = 188110181513518238L;
 	private static final int PADDING_X = 16;
@@ -320,7 +320,7 @@ public class GameContent extends JPanel implements ActionListener {
 		return positionManager;
 	}
 	
-	protected void updateScreen() {
+	private void updateScreen() {
 		this.revalidate();
 		this.repaint();
 	}
@@ -330,18 +330,13 @@ public class GameContent extends JPanel implements ActionListener {
 		updateScreen();
 	}
 	
-	public void setUpdatePositionManager(boolean resetPositionManager) {
-		this.resetPositionManager = resetPositionManager;
-	}
-	
-	public void setAnimationOccurring(boolean isAnimationOccurring) {
-		this.isAnimationOccurring = isAnimationOccurring;
+	public void setAnimationBeginning() {
+		this.resetPositionManager = true;
+		this.isAnimationOccurring = true;
 	}
 	
 	public boolean getIsAnimationOccurring() {
 		return this.isAnimationOccurring;
 	}
 
-
-	
 }
