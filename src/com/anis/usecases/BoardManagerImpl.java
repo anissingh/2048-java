@@ -83,17 +83,6 @@ public class BoardManagerImpl implements BoardManager {
 		
 	}
 	
-	// Returns a 2D integer array representing the value of the tiles on the board
-	public int[][] getBoardValues() {
-		int[][] boardValues = new int[ROWS][COLS];
-		for(int i = 0; i < ROWS; i++) {
-			for(int j = 0; j < COLS; j++) {
-				boardValues[i][j] = TileManager.getTileValue(board[i][j]);
-			}
-		}
-		return boardValues;
-	}
-	
 	// Move all tiles left
 	public boolean moveLeft() {
 		boolean tileMoved = false;
