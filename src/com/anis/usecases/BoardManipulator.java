@@ -1,10 +1,9 @@
 package com.anis.usecases;
 
+import com.anis.enums.Direction;
+
 public interface BoardManipulator {
 	
-	boolean moveLeft();
-	boolean moveRight();
-	boolean moveUp();
-	boolean moveDown();
+	boolean move(Direction direction);
 	
 }

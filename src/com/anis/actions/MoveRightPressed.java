@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import com.anis.enums.Direction;
 import com.anis.ia.ContentAnimationManager;
 import com.anis.usecases.BoardManipulator;
 
@@ -24,7 +25,7 @@ public class MoveRightPressed extends AbstractAction {
 		if(!KeysPressed.isRightArrowPressed && !animationManager.getIsAnimationOccurring()) {
 			KeysPressed.isRightArrowPressed = true;
 			System.out.println("Right arrow pressed");
-			boolean tileMoved = boardManipulator.moveRight();
+			boolean tileMoved = boardManipulator.move(Direction.RIGHT);
 			if(tileMoved) {
 				animationManager.setAnimationBeginning();
 			}

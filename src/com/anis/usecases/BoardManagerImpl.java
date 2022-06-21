@@ -85,59 +85,26 @@ public class BoardManagerImpl implements BoardManager {
 		
 	}
 	
-	// Move all tiles left
-	public boolean moveLeft() {
+	// Move all tiles in the specified direction
+	public boolean move(Direction direction) {
 		boolean tileMoved = false;
-		for(int i = 0; i < ROWS; i++) {
-			// Merge all appropriate tiles
-			tileMoved = handleLateralMerge(i, Direction.LEFT, tileMoved);
-			// Move all tiles to leftmost spot
-			tileMoved = handleLateralShifting(i, Direction.LEFT, tileMoved);
+		if(direction == Direction.LEFT || direction == Direction.RIGHT) {
+			for(int i = 0; i < ROWS; i++) {
+				// Merge all appropriate tiles
+				tileMoved = handleLateralMerge(i, direction, tileMoved);
+				// Move all tiles to leftmost spot
+				tileMoved = handleLateralShifting(i, direction, tileMoved);
+			}
+		} else {
+			// direction is Direction.UP or direction == Direction.DOWN
+			for(int j = 0; j < COLS; j++) {
+				// Merge all appropriate tiles
+				tileMoved = handleVerticalMerging(j, direction, tileMoved);
+				// Move all tiles to up-most spot
+				tileMoved = handleVerticalShifting(j, direction, tileMoved);
+			}
 		}
 		
-		// Return whether or not the tile moved
-		return tileMoved;
-	}
-	
-	// Move all tiles right
-	public boolean moveRight() {
-		boolean tileMoved = false;
-		for(int i = 0; i < ROWS; i++) {
-			// Merge all appropriate tiles
-			tileMoved = handleLateralMerge(i, Direction.RIGHT, tileMoved);
-			// Move all tiles to rightmost spot
-			tileMoved = handleLateralShifting(i, Direction.RIGHT, tileMoved);
-		}
-		return tileMoved;
-	}
-	
-	// Move all tiles up
-	public boolean moveUp() {
-		boolean tileMoved = false;
-		for(int j = 0; j < COLS; j++) {
-			// Merge all appropriate tiles
-			tileMoved = handleVerticalMerging(j, Direction.UP, tileMoved);
-			
-			// Move all tiles to up-most spot
-			tileMoved = handleVerticalShifting(j, Direction.UP, tileMoved);
-		}
-		
-		// Return whether or not a tile moved
-		return tileMoved;
-	}
-	
-	// Move all tiles down
-	public boolean moveDown() {
-		boolean tileMoved = false;
-		for(int j = 0; j < COLS; j++) {
-			// Merge all appropriate tiles
-			tileMoved = handleVerticalMerging(j, Direction.DOWN, tileMoved);
-			
-			// Move all tiles to down-most spot
-			tileMoved = handleVerticalShifting(j, Direction.DOWN, tileMoved);
-		}
-		
-		// Return whether or not a tile moved
 		return tileMoved;
 	}
 	
