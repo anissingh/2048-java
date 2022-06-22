@@ -11,8 +11,7 @@ public class BoardManagerImpl implements BoardManager {
 	private Random rand;
 	private final ScoreIncrementer scoreIncrementer;
 	private boolean canMove = true;
-	
-	// TODO: Add functionality to load in custom board
+
 	public BoardManagerImpl(ScoreIncrementer scoreIncrementer) {
 		board = new Tile[ROWS][COLS];
 		rand = new Random();
@@ -37,10 +36,7 @@ public class BoardManagerImpl implements BoardManager {
 	// Spawns a tile and returns true if a tile was spawned. Returns false if a tile was not spawned because
 	// the board was full
 	public boolean spawnTile() {
-		int tileY = rand.nextInt(ROWS);
-		int tileX = rand.nextInt(COLS);
-		
-		int tileVal = rand.nextInt(3);
+		int tileVal = rand.nextInt(4);
 		// Slightly lower chance to spawn a 4 than a 2
 		if(tileVal == 0) {
 			// Set Tile value in board position
@@ -48,43 +44,57 @@ public class BoardManagerImpl implements BoardManager {
 		} else {
 			tileVal = 2;
 		}
-	
-		// TODO: Try spawning a tile 3 times before auto-searching
-		// Check if there is no tile at this location
-		if(TileManager.getTileValue(board[tileY][tileX]) == 0) {
-			TileManager.setTileValue(board[tileY][tileX], tileVal);
-			// TODO: For debugging
-			System.out.println("Tile spawned at " + tileX + ", " + tileY);
-			setGameOver();
-			return true;
-		} else {
-			boolean isTileSpawnable = false;
-			// Search for the first empty spot on the board
-			for(int i = 0; i < ROWS; i++) {
-				for(int j = 0; j < COLS; j++) {
-					// Check if current spot on board has no Tile
-					if(TileManager.getTileValue(board[i][j]) == 0) {
-						tileY = i;
-						tileX = j;
-						isTileSpawnable = true;
-						break;
-					}
-				}
-			}
-			if(isTileSpawnable) {
-				TileManager.setTileValue(board[tileY][tileX], tileVal);
-				// TODO: For debugging
-				System.out.println("Tile spawned at " + tileX + ", " + tileY);
-				setGameOver();
+		int counter = 0;
+		int tileY;
+		int tileX;
+		int triesToRandomSpawn = 3;
+		// Try to spawn a tile at a random location a few times first
+		while(counter < triesToRandomSpawn) {
+			tileY = rand.nextInt(ROWS);
+			tileX = rand.nextInt(COLS);
+			// Check if there is no tile at this location
+			if(TileManager.getTileValue(board[tileY][tileX]) == 0) {
+				spawnTileHandler(tileY, tileX, tileVal);
 				return true;
 			}
-			
+			counter++;
+		}
+		
+		// If we make it this far, we need to search the board to find a place to spawn the tile
+		tileY = 0;
+		tileX = 0;
+		boolean isTileSpawnable = false;
+		// Search for the first empty spot on the board
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLS; j++) {
+				// Check if current spot on board has no Tile
+				if(TileManager.getTileValue(board[i][j]) == 0) {
+					tileY = i;
+					tileX = j;
+					isTileSpawnable = true;
+					break;
+				}
+			}
+		}
+		
+		// If we found a place to spawn the tile, spawn it
+		if(isTileSpawnable) {
+			spawnTileHandler(tileY, tileX, tileVal);
+			return true;
+		} else {
+			// Otherwise, we can't spawn a tile
 			System.out.println("No tile spawned.");
 			// If no tile was spawned, the game must be over
 			this.canMove = false;
 			return false;
 		}
 		
+	}
+	
+	private void spawnTileHandler(int tileY, int tileX, int tileVal) {
+		TileManager.setTileValue(board[tileY][tileX], tileVal);
+		System.out.println("Tile spawned at " + tileX + ", " + tileY);
+		setGameOver();
 	}
 	
 	// Move all tiles in the specified direction
@@ -337,7 +347,7 @@ public class BoardManagerImpl implements BoardManager {
 		return this.canMove;
 	}
 	
-	// TODO: For debugging
+	// For debugging
 	// Prints a text-representation of the board
 	public void printBoard() {
 		for(int i = 0; i < ROWS; i++) {
