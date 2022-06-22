@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import com.anis.enums.Direction;
 import com.anis.ia.ContentAnimationManager;
 import com.anis.usecases.BoardManipulator;
 
@@ -30,7 +31,7 @@ public class MoveLeftPressed extends AbstractAction {
 			KeysPressed.isLeftArrowPressed = true;
 			System.out.println("Left arrow pressed");
 			// Move left and repaint board
-			boolean tileMoved = boardManipulator.moveLeft();
+			boolean tileMoved = boardManipulator.move(Direction.LEFT);
 			// If a tile actually moved
 			if(tileMoved) {
 				// TODO: There may be an issue if the board tries to re-update in between moveLeft() and setUpdate()

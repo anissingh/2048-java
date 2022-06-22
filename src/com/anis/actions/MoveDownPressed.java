@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import com.anis.enums.Direction;
 import com.anis.ia.ContentAnimationManager;
 import com.anis.usecases.BoardManipulator;
 
@@ -24,7 +25,7 @@ public class MoveDownPressed extends AbstractAction {
 		if(!KeysPressed.isDownArrowPressed && !animationManager.getIsAnimationOccurring()) {
 			KeysPressed.isDownArrowPressed = true;
 			System.out.println("Down arrow pressed");
-			boolean tileMoved = boardManipulator.moveDown();
+			boolean tileMoved = boardManipulator.move(Direction.DOWN);
 			if(tileMoved) {
 				animationManager.setAnimationBeginning();
 			}

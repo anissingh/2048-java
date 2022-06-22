@@ -14,6 +14,7 @@ import com.anis.usecases.BoardManager;
 import com.anis.usecases.BoardManagerImpl;
 import com.anis.usecases.BoardOutputBoundary;
 import com.anis.usecases.BoardTileMatrix;
+import com.anis.usecases.ScoreManager;
 
 public class GameInitializer {
 	
@@ -23,10 +24,11 @@ public class GameInitializer {
 	
 	public static void setUpGame() {
 		JFrame frame = new JFrame(WINDOW_TITLE);
-		BoardManager bm = new BoardManagerImpl();
+		ScoreManager sm = new ScoreManager();
+		BoardManager bm = new BoardManagerImpl(sm);
 		bm.initializeBoard();
 		BoardTileMatrix bo = new BoardOutputBoundary(bm);
-		GameContent content = new GameContent(bm, bo);
+		GameContent content = new GameContent(bm, bo, sm);
 		initWindow(frame, content, bm);
 	}
 	

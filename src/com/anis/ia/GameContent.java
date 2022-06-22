@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.anis.usecases.BoardTileMatrix;
+import com.anis.usecases.ScoreFetcher;
 import com.anis.usecases.TileSpawner;
 
 public class GameContent extends JPanel implements ActionListener, ContentAnimationManager {
@@ -42,10 +43,13 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
     private static final int BOARD_ARC_Y = 10;
     private static final Font TILE_FONT = new Font("TimesRoman", Font.BOLD, 18);
     private static final Font GAME_OVER_FONT = new Font("TimesRoman", Font.BOLD, 40);
+    private static final Font SCORE_FONT = new Font("TimesRoman", Font.BOLD, 26);
+    private static final Font SCORE_NUMBER_FONT = new Font("TimesRoman", Font.BOLD, 16);
     private static final int ANIMATION_DELAY_MS = 10;
 	private final TileSpawner tileSpawner;
 	private final BoardTileMatrix boardOutput;
 	private final Timer timer;
+	private final ScoreFetcher scoreFetcher;
 	private PositionManager positionManager;
 	private boolean resetPositionManager;
 	private boolean isAnimationOccurring = false;
@@ -53,11 +57,12 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
 	private boolean stopDrawing = false;
 	
 	
-	public GameContent(TileSpawner tileSpawner, BoardTileMatrix boardOutput) {
+	public GameContent(TileSpawner tileSpawner, BoardTileMatrix boardOutput, ScoreFetcher scoreFetcher) {
 		this.tileSpawner = tileSpawner;
 		this.boardOutput = boardOutput;
 		this.positionManager = initializePositionManager();
 		this.resetPositionManager = false;
+		this.scoreFetcher = scoreFetcher;
 		this.timer = new Timer(ANIMATION_DELAY_MS, this);
 		this.timer.start();
 	}
@@ -132,6 +137,9 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
 				}
 			}
 		}
+		
+		// Draw score
+		drawScore(g);
 		
 		if(!tileAnimating && isAnimationOccurring) {
 			isAnimationOccurring = false;
@@ -305,6 +313,19 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
 		int sizeY = TILE_SIZE_Y * BoardTileMatrix.COLS + PADDING_Y * (BoardTileMatrix.COLS + 1);
 		int offset = 20;
 		g.drawString("Game over!", sizeX / 2 - offset, sizeY / 2);
+	}
+	
+	private void drawScore(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.setFont(SCORE_FONT);
+		int sizeX = TILE_SIZE_X * BoardTileMatrix.ROWS + PADDING_X * (BoardTileMatrix.ROWS + 1);
+		int offsetX = TILE_SIZE_X - 30;
+		int offsetY = TILE_SIZE_Y / 2;
+		g.drawString("Score:", sizeX + offsetX, offsetY);
+		g.setFont(SCORE_NUMBER_FONT);
+		int scoreOffsetX = calculateTileTextOffset(scoreFetcher.getScore());
+		// +40 centres the score, +20 moves it below the text "score"
+		g.drawString(Integer.toString(scoreFetcher.getScore()), sizeX + offsetX + 30 - scoreOffsetX, offsetY + 20);
 	}
 	
 	// TODO: Move this to a different class

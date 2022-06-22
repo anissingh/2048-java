@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import com.anis.enums.Direction;
 import com.anis.ia.ContentAnimationManager;
 import com.anis.usecases.BoardManipulator;
 
@@ -24,7 +25,7 @@ public class MoveUpPressed extends AbstractAction {
 		if(!KeysPressed.isUpArrowPressed && !animationManager.getIsAnimationOccurring()) {
 			KeysPressed.isUpArrowPressed = true;
 			System.out.println("Up arrow pressed");
-			boolean tileMoved = boardManipulator.moveUp();
+			boolean tileMoved = boardManipulator.move(Direction.UP);
 			if(tileMoved) {
 				animationManager.setAnimationBeginning();
 			}
