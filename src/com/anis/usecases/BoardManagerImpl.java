@@ -147,16 +147,16 @@ public class BoardManagerImpl implements BoardManager {
 				// merge them
 				// Note tileSet being true ensures board[i][currIndex] value != 0 and therefore board[i][j].getValue() != 0
 				// TODO: Use TileManager here
-				board[i][currIndex].setValue(tileBeingAnalyzedVal * 2);
-				// TODO: Do animations for merging. For now they are disabled by the following 2 lines of code
+				TileManager.setTileValue(board[i][currIndex], tileBeingAnalyzedVal * 2);
+//				board[i][currIndex].setValue(tileBeingAnalyzedVal * 2);
 				TileManager.setTilePrevX(board[i][currIndex], currIndex);
 				TileManager.setTilePrevY(board[i][currIndex], i);
 				// This is the tile that was merged, so set its wasMerged attribute to true
 				TileManager.setTileWasMerged(board[i][currIndex], true);
 				// Also set the tile to be expanding
 				TileManager.setTileIsExpanding(board[i][currIndex], true);
-				board[i][j].setValue(0);
-				// TODO: Do animations for merging. For now they are disabled by the following 2 lines of code
+				TileManager.setTileValue(board[i][j], 0);
+//				board[i][j].setValue(0);
 				TileManager.setTilePrevX(board[i][j], j);
 				TileManager.setTilePrevY(board[i][j], i);
 				tileSet = false;
@@ -196,21 +196,18 @@ public class BoardManagerImpl implements BoardManager {
 				currIndex = i;
 			} else if(tileSet && tileBeingAnalyzedVal == currTileVal) {
 				// TODO: Use TileManager here
-				board[currIndex][j].setValue(tileBeingAnalyzedVal * 2);
-				// TODO: Do animations for merging. For now they are disabled by the following 2 lines of code
+				TileManager.setTileValue(board[currIndex][j], tileBeingAnalyzedVal * 2);
+//				board[currIndex][j].setValue(tileBeingAnalyzedVal * 2);
 				TileManager.setTilePrevX(board[currIndex][j], j);
 				TileManager.setTilePrevY(board[currIndex][j], currIndex);
-
 				TileManager.setTileWasMerged(board[currIndex][j], true);
 				TileManager.setTileIsExpanding(board[currIndex][j], true);
-				
-				board[i][j].setValue(0);
-				// TODO: Do animations for merging. For now they are disabled by the following 2 lines of code
+				TileManager.setTileValue(board[i][j], 0);
+//				board[i][j].setValue(0);
 				TileManager.setTilePrevX(board[i][j], j);
 				TileManager.setTilePrevY(board[i][j], i);
 				tileSet = false;
 				tileMoved = true;
-				
 				scoreIncrementer.incrementScore(tileBeingAnalyzedVal * 2);
 			} else if(tileSet && tileBeingAnalyzedVal != currTileVal && currTileVal != 0) {
 				currIndex = i;

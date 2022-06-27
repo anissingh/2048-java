@@ -2,7 +2,6 @@ package com.anis.ia;
 
 import com.anis.entities.Position;
 
-// TODO: rename
 public class PositionManager {
 	
 	private Position[][] positions;

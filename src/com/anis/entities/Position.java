@@ -1,6 +1,5 @@
 package com.anis.entities;
 
-// TODO: Rename
 public class Position {
 	
 	private static final int UNSET_POSITION = -1;

@@ -76,7 +76,6 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
 		}
 	}
 	
-	// TODO: This method is too long; break into helper methods
 	private void drawBoard(Graphics g) {
 		boolean tileAnimating = false;
 		if(resetPositionManager) {
@@ -328,7 +327,6 @@ public class GameContent extends JPanel implements ActionListener, ContentAnimat
 		g.drawString(Integer.toString(scoreFetcher.getScore()), sizeX + offsetX + 30 - scoreOffsetX, offsetY + 20);
 	}
 	
-	// TODO: Move this to a different class
 	private PositionManager initializePositionManager() {
 		PositionManager positionManager = new PositionManager(BoardTileMatrix.ROWS, BoardTileMatrix.COLS);
 		for(int i = 0; i < BoardTileMatrix.ROWS; i++) {

@@ -34,8 +34,6 @@ public class MoveLeftPressed extends AbstractAction {
 			boolean tileMoved = boardManipulator.move(Direction.LEFT);
 			// If a tile actually moved
 			if(tileMoved) {
-				// TODO: There may be an issue if the board tries to re-update in between moveLeft() and setUpdate()
-				// because the positionManager won't be updated.
 				// Tell content that an animation should be occurring
 				animationManager.setAnimationBeginning();
 			}
